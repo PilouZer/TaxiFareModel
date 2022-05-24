@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/pilou/code/PilouZer/TaxiFareModel/mlruns/1/b9da8e493f5f4d41b2571303b5eedbfb/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: b9da8e493f5f4d41b2571303b5eedbfb
+run_uuid: b9da8e493f5f4d41b2571303b5eedbfb
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1653395717287
+status: 1
+tags: []
+user_id: unknown
