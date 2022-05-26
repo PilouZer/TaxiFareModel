@@ -9,6 +9,10 @@ from sklearn.model_selection import train_test_split
 from memoized_property import memoized_property
 import mlflow
 from mlflow.tracking import MlflowClient
+import joblib
+from xgboost import XGBRegressor
+from sklearn.model_selection import cross_validate
+import numpy as np
 
 
 class Trainer():
@@ -41,7 +45,7 @@ class Trainer():
         ], remainder="drop")
         pipe = Pipeline([
             ('preproc', preproc_pipe),
-            ('linear_model', LinearRegression())
+            ('linear_model', XGBRegressor())
         ])
         self.pipeline = pipe
 
@@ -57,6 +61,11 @@ class Trainer():
         rmse = compute_rmse(y_pred, y_test)
         print(rmse)
         return rmse
+
+    #def cross_val(self,X,y):
+        #cv_score = cross_validate(self.pipeline, X, y, scoring='mean_squared_error')
+        #print(np.sqrt(cv_score['test_score']).mean())
+        #return np.sqrt(cv_score['test_score']).mean()
 
     @memoized_property
     def mlflow_client(self):
@@ -80,6 +89,10 @@ class Trainer():
     def mlflow_log_metric(self, key, value):
         self.mlflow_client.log_metric(self.mlflow_run.info.run_id, key, value)
 
+    def save_model(self):
+        """ Save the trained model into a model.joblib file """
+        joblib.dump(self.pipeline, 'model.joblib')
+
 
 if __name__ == "__main__":
     # get data
@@ -98,5 +111,7 @@ if __name__ == "__main__":
     # evaluate
     eval = model.evaluate(X_test,y_test)
     print('TODO')
-    model.mlflow_log_param("model", "linear")
+    model.mlflow_log_param("model", "XGBRegressor")
     model.mlflow_log_metric("rmse", eval)
+    model.save_model()
+    #model.cross_val(X,y)
